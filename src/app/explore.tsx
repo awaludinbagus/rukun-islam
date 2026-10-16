@@ -1,180 +1,140 @@
-import { Image } from 'expo-image';
-import { SymbolView } from 'expo-symbols';
-import { Platform, Pressable, ScrollView, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React from 'react';
+import { ScrollView, View, Text, StyleSheet, useColorScheme } from 'react-native';
+import { Colors, MaxContentWidth, Spacing, BottomTabInset } from '@/constants/theme';
+import { OfflineIndicator } from '@/components/offline-indicator';
 
-import { ExternalLink } from '@/components/external-link';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Collapsible } from '@/components/ui/collapsible';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
-
-export default function TabTwoScreen() {
-  const safeAreaInsets = useSafeAreaInsets();
-  const insets = {
-    ...safeAreaInsets,
-    bottom: safeAreaInsets.bottom + BottomTabInset + Spacing.three,
-  };
-  const theme = useTheme();
-
-  const contentPlatformStyle = Platform.select({
-    android: {
-      paddingTop: insets.top,
-      paddingLeft: insets.left,
-      paddingRight: insets.right,
-      paddingBottom: insets.bottom,
-    },
-    web: {
-      paddingTop: Spacing.six,
-      paddingBottom: Spacing.four,
-    },
-  });
+export default function ExploreScreen() {
+  const scheme = useColorScheme();
+  const colors = Colors[scheme === 'dark' ? 'dark' : 'light'];
 
   return (
     <ScrollView
-      style={[styles.scrollView, { backgroundColor: theme.background }]}
-      contentInset={insets}
-      contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}>
-      <ThemedView style={styles.container}>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="subtitle">Explore</ThemedText>
-          <ThemedText style={styles.centerText} themeColor="textSecondary">
-            This starter app includes example{'\n'}code to help you get started.
-          </ThemedText>
+      style={[styles.container, { backgroundColor: colors.background }]}
+      contentContainerStyle={styles.contentContainer}>
+      <View style={styles.innerWrapper}>
+        <View
+          style={[
+            styles.headerBanner,
+            { backgroundColor: scheme === 'dark' ? '#064e3b' : '#059669' },
+          ]}>
+          <Text style={styles.headerSubtitle}>Informasi & Referensi</Text>
+          <Text style={styles.headerTitle}>Tentang Aplikasi Rukun Islam</Text>
+          <Text style={styles.headerDesc}>
+            Aplikasi mandiri 100% offline untuk tata cara 5 rukun Islam, hisab astronomi sholat, kalender puasa, dan zakat
+          </Text>
+        </View>
 
-          <ExternalLink href="https://docs.expo.dev" asChild>
-            <Pressable style={({ pressed }) => pressed && styles.pressed}>
-              <ThemedView type="backgroundElement" style={styles.linkButton}>
-                <ThemedText type="link">Expo documentation</ThemedText>
-                <SymbolView
-                  tintColor={theme.text}
-                  name={{ ios: 'arrow.up.right.square', android: 'link', web: 'link' }}
-                  size={12}
-                />
-              </ThemedView>
-            </Pressable>
-          </ExternalLink>
-        </ThemedView>
+        <OfflineIndicator />
 
-        <ThemedView style={styles.sectionsWrapper}>
-          <Collapsible title="File-based routing">
-            <ThemedText type="small">
-              This app has two screens: <ThemedText type="code">src/app/index.tsx</ThemedText> and{' '}
-              <ThemedText type="code">src/app/explore.tsx</ThemedText>
-            </ThemedText>
-            <ThemedText type="small">
-              The layout file in <ThemedText type="code">src/app/_layout.tsx</ThemedText> sets up
-              the tab navigator.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/router/introduction">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+        <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
+          <Text style={[styles.cardTitle, { color: colors.text }]}>Fitur Utama Aplikasi</Text>
+          <View style={styles.featureItem}>
+            <Text style={{ fontSize: 20 }}>🕌</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.featureTitle, { color: colors.text }]}>Jadwal Sholat Astronomis Offline</Text>
+              <Text style={[styles.featureDesc, { color: colors.textSecondary }]}>
+                Dihitung secara matematis menggunakan rumus hisab Kementerian Agama RI (Fajr 20°, Isha 18°, ikhtiyat 2 menit) untuk 38+ kota besar di Indonesia atau koordinat GPS kustom tanpa perlu koneksi internet.
+              </Text>
+            </View>
+          </View>
 
-          <Collapsible title="Android, iOS, and web support">
-            <ThemedView type="backgroundElement" style={styles.collapsibleContent}>
-              <ThemedText type="small">
-                You can open this project on Android, iOS, and the web. To open the web version,
-                press <ThemedText type="smallBold">w</ThemedText> in the terminal running this
-                project.
-              </ThemedText>
-              <Image
-                source={require('@/assets/images/tutorial-web.png')}
-                style={styles.imageTutorial}
-              />
-            </ThemedView>
-          </Collapsible>
+          <View style={styles.featureItem}>
+            <Text style={{ fontSize: 20 }}>🌙</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.featureTitle, { color: colors.text }]}>Jadwal Imsakiyah & Puasa Sunnah</Text>
+              <Text style={[styles.featureDesc, { color: colors.textSecondary }]}>
+                Waktu imsak harian, countdown menuju buka puasa & imsak, kalender puasa sunnah (Senin-Kamis, Ayyamul Bidh 13, 14, 15 Hijriah, Ramadhan, Syawwal, Arafah), niat dan doa berbuka.
+              </Text>
+            </View>
+          </View>
 
-          <Collapsible title="Images">
-            <ThemedText type="small">
-              For static images, you can use the <ThemedText type="code">@2x</ThemedText> and{' '}
-              <ThemedText type="code">@3x</ThemedText> suffixes to provide files for different
-              screen densities.
-            </ThemedText>
-            <Image source={require('@/assets/images/react-logo.png')} style={styles.imageReact} />
-            <ExternalLink href="https://reactnative.dev/docs/images">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+          <View style={styles.featureItem}>
+            <Text style={{ fontSize: 20 }}>🪙</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.featureTitle, { color: colors.text }]}>Kalkulator Zakat Komprehensif</Text>
+              <Text style={[styles.featureDesc, { color: colors.textSecondary }]}>
+                Perhitungan otomatis untuk Zakat Fitrah (beras/uang), Zakat Maal (nisab 85g emas), Zakat Profesi/Penghasilan bulanan, Zakat Perniagaan, dan Pertanian.
+              </Text>
+            </View>
+          </View>
 
-          <Collapsible title="Light and dark mode components">
-            <ThemedText type="small">
-              This template has light and dark mode support. The{' '}
-              <ThemedText type="code">useColorScheme()</ThemedText> hook lets you inspect what the
-              user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+          <View style={styles.featureItem}>
+            <Text style={{ fontSize: 20 }}>📖</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.featureTitle, { color: colors.text }]}>Tata Cara 5 Rukun Islam Lengkap</Text>
+              <Text style={[styles.featureDesc, { color: colors.textSecondary }]}>
+                Penjelasan fiqih mendalam mengenai Syahadat, Sholat (termasuk Wudhu & bacaan rukun sholat), Zakat, Puasa, hingga Manasik Haji & Umrah dari hari ke hari.
+              </Text>
+            </View>
+          </View>
+        </View>
 
-          <Collapsible title="Animations">
-            <ThemedText type="small">
-              This template includes an example of an animated component. The{' '}
-              <ThemedText type="code">src/components/ui/collapsible.tsx</ThemedText> component uses
-              the powerful <ThemedText type="code">react-native-reanimated</ThemedText> library to
-              animate opening this hint.
-            </ThemedText>
-          </Collapsible>
-        </ThemedView>
-        {Platform.OS === 'web' && <WebBadge />}
-      </ThemedView>
+        <View style={{ height: BottomTabInset + 60 }} />
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
+  container: {
     flex: 1,
   },
   contentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  container: {
-    maxWidth: MaxContentWidth,
-    flexGrow: 1,
-  },
-  titleContainer: {
-    gap: Spacing.three,
-    alignItems: 'center',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.six,
-  },
-  centerText: {
-    textAlign: 'center',
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-  linkButton: {
-    flexDirection: 'row',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.two,
-    borderRadius: Spacing.five,
-    justifyContent: 'center',
-    gap: Spacing.one,
+    paddingHorizontal: Spacing.three,
+    paddingTop: Spacing.four,
     alignItems: 'center',
   },
-  sectionsWrapper: {
-    gap: Spacing.five,
-    paddingHorizontal: Spacing.four,
-    paddingTop: Spacing.three,
-  },
-  collapsibleContent: {
-    alignItems: 'center',
-  },
-  imageTutorial: {
+  innerWrapper: {
     width: '100%',
-    aspectRatio: 296 / 171,
-    borderRadius: Spacing.three,
-    marginTop: Spacing.two,
+    maxWidth: MaxContentWidth,
   },
-  imageReact: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
+  headerBanner: {
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 12,
+  },
+  headerSubtitle: {
+    color: '#a7f3d0',
+    fontSize: 12,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  headerTitle: {
+    color: '#ffffff',
+    fontSize: 22,
+    fontWeight: '800',
+    marginTop: 2,
+  },
+  headerDesc: {
+    color: '#d1fae5',
+    fontSize: 12,
+    marginTop: 4,
+    lineHeight: 16,
+  },
+  card: {
+    borderRadius: 18,
+    borderWidth: 1,
+    padding: 16,
+    marginVertical: 8,
+  },
+  cardTitle: {
+    fontSize: 17,
+    fontWeight: '800',
+    marginBottom: 12,
+  },
+  featureItem: {
+    flexDirection: 'row',
+    gap: 12,
+    marginVertical: 10,
+    alignItems: 'flex-start',
+  },
+  featureTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  featureDesc: {
+    fontSize: 12,
+    lineHeight: 17,
+    marginTop: 2,
   },
 });
